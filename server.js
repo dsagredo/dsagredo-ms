@@ -1,5 +1,5 @@
 import express from 'express';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -63,6 +63,21 @@ app.post('/portfolio-add-ms', async (req, res) => {
         });
     } catch (err) {
         res.status(500).send('Error al insertar datos');
+    }
+});
+
+app.delete('/portfolio-delete-ms/:id', async (req, res) => {
+    try {
+        const collection = db.collection('portafolio');
+        const id = req.params.id;
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 1) {
+            res.status(200).json({ mensaje: 'Eliminado exitosamente' });
+        } else {
+            res.status(404).json({ mensaje: 'No se encontró el id' });
+        }
+    } catch (err) {
+        res.status(500).send('Error al eliminar datos');
     }
 });
 
