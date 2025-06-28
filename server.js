@@ -66,6 +66,22 @@ app.post('/portfolio-add-ms', async (req, res) => {
     }
 });
 
+// Ruta para obtener un portafolio por ID
+app.get('/portfolio-ms/:id', async (req, res) => {
+    try {
+        const collection = db.collection('portafolio');
+        const id = req.params.id;
+        const data = await collection.findOne({ _id: new ObjectId(id) });
+        if (data) {
+            res.status(200).json(data);
+        } else {
+            res.status(404).json({ mensaje: 'No se encontró el portafolio' });
+        }
+    } catch (err) {
+        res.status(500).send('Error al obtener el portafolio');
+    }
+});
+
 app.delete('/portfolio-delete-ms/:id', async (req, res) => {
     try {
         const collection = db.collection('portafolio');
