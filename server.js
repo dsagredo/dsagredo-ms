@@ -52,13 +52,18 @@ app.get('/portfolio-ms', (req, res) => {
 });
 
 // Ruta para agregar datos a MongoDB
-app.post('/portfolio-add-ms', (req, res) => {
-    const collection = db.collection('portafolio');
-    const newData = req.body;
-    collection
-        .insertOne(newData)
-        .then((result) => res.json(result.ops[0]))
-        .catch((err) => res.status(500).send('Error al insertar datos'));
+app.post('/portfolio-add-ms', async (req, res) => {
+    try {
+        const collection = db.collection('portafolio');
+        const newData = req.body;
+        const result = await collection.insertOne(newData);
+        res.status(200).json({
+            mensaje: 'Guardado exitosamente',
+            id: { id: result.insertedId },
+        });
+    } catch (err) {
+        res.status(500).send('Error al insertar datos');
+    }
 });
 
 // Configurar el puerto del servidor
