@@ -59,7 +59,7 @@ app.post('/portfolio-add-ms', async (req, res) => {
         const result = await collection.insertOne(newData);
         res.status(200).json({
             mensaje: 'Guardado exitosamente',
-            id: { id: result.insertedId },
+            id: result.insertedId,
         });
     } catch (err) {
         res.status(500).send('Error al insertar datos');
