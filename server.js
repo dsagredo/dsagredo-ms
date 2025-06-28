@@ -1,6 +1,6 @@
-// Importar dependencias
 import express from 'express';
 import { MongoClient } from 'mongodb';
+import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,6 +9,9 @@ const app = express();
 
 // Middleware para parsear JSON en las solicitudes
 app.use(express.json());
+
+// Habilitar CORS
+app.use(cors());
 
 // Configurar el URI de conexión de MongoDB
 const uri = process.env.MONGODB_URI;
@@ -34,7 +37,7 @@ MongoClient.connect(uri)
     .catch((err) => console.error('Error al conectar a MongoDB:', err));
 
 // Ruta para obtener datos de MongoDB
-app.get('/portafolio-ms', (req, res) => {
+app.get('/portfolio-ms', (req, res) => {
     const collection = db.collection('portafolio');
 
     collection
@@ -49,7 +52,7 @@ app.get('/portafolio-ms', (req, res) => {
 });
 
 // Ruta para agregar datos a MongoDB
-app.post('/portafolio-ms', (req, res) => {
+app.post('/portfolio-add-ms', (req, res) => {
     const collection = db.collection('portafolio');
     const newData = req.body;
     collection
@@ -60,6 +63,7 @@ app.post('/portafolio-ms', (req, res) => {
 
 // Configurar el puerto del servidor
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
